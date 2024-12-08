@@ -1,6 +1,12 @@
 # modconflict
 Tool to quickly locate paths with conflicting dependencies.
 
+## Installation
+### go install
+```shell
+go install github.com/muskonu/modconflict@latest
+```
+
 ## modconflict graph
 
 Generate images of potentially conflicting dependency routes.
