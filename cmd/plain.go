@@ -11,7 +11,7 @@ import (
 // plainCmd represents the plain command
 var plainCmd = &cobra.Command{
 	Use:   "plain",
-	Short: "Print out the chain of possible dependency conflicts.",
+	Short: "Print out the chain of possible dependency conflicts",
 	Long:  `Print out the chain of possible dependency conflicts.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		s, err := utils.GetInputScanner(InputFileName)
