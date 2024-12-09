@@ -14,7 +14,7 @@ import (
 var graphCmd = &cobra.Command{
 	Use:   "graph",
 	Short: "Generate images of potentially conflicting dependency routes",
-	Long:  `Generate images of potentially conflicting dependency routes.`,
+	Long:  `Generate images of potentially conflicting dependency routes,depends on graphviz.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		s, err := utils.GetInputScanner(InputFileName)
 		if err != nil {

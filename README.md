@@ -1,5 +1,5 @@
 # modconflict
-Tool to quickly locate paths with conflicting dependencies.
+A tool to quickly locate paths to dependency conflicts, mainly to solve dependency problems caused by 0 major version numbers or various community non-compliance with the semver specification.
 
 ## Installation
 ### go install

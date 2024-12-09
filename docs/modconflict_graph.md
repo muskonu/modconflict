@@ -4,7 +4,7 @@ Generate images of potentially conflicting dependency routes.
 
 ### Synopsis
 
-Generate images of potentially conflicting dependency routes.
+Generate images of potentially conflicting dependency routes,depends on graphviz.
 
 ```
 modconflict graph [flags]
