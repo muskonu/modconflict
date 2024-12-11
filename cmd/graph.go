@@ -27,7 +27,7 @@ var graphCmd = &cobra.Command{
 				log.Fatal(err)
 			}
 		}
-		path := graph.findGraphConflict()
+		path, nodeMap := graph.findGraphConflict()
 		parse, err := template.New("graphviz").Parse(tmpl.DotTmpl)
 		if err != nil {
 			log.Fatal(err)
@@ -40,7 +40,7 @@ var graphCmd = &cobra.Command{
 
 		defer f.Close()
 
-		tmplInfo := graph.GetTmplInfo(path)
+		tmplInfo := graph.GetTmplInfo(nodeMap, path)
 
 		err = parse.Execute(f, tmplInfo)
 		if err != nil {
@@ -71,12 +71,15 @@ func init() {
 	graphCmd.Flags().StringVarP(&OutputFileName, "ouput", "o", "", "the name of the output file, with different formats depending on the suffix.")
 }
 
-func (g *Graph) findGraphConflict() []string {
+func (g *Graph) findGraphConflict() ([]string, map[string]*Node) {
 	path := []string{}
 	visited := map[*Node]bool{}
 
 	var findPath func(n *Node)
 	dep := 0
+
+	nodeMap := map[string]*Node{}
+
 	findPath = func(n *Node) {
 		dep++
 		defer func() {
@@ -85,6 +88,7 @@ func (g *Graph) findGraphConflict() []string {
 		if visited[n] {
 			return
 		}
+		nodeMap[n.PackageWithVersion] = n
 		visited[n] = true
 		if dep != 1 {
 			if len(n.Parents) != 0 {
@@ -109,7 +113,7 @@ func (g *Graph) findGraphConflict() []string {
 			}
 		}
 	}
-	return path
+	return path, nodeMap
 }
 
 type TmplInfo struct {
@@ -117,15 +121,7 @@ type TmplInfo struct {
 	Paths   []string
 }
 
-func (g *Graph) GetTmplInfo(paths []string) TmplInfo {
-	nodeMap := map[string]*Node{}
-	for _, nodes := range g.PackageMap {
-		if len(nodes) > 1 {
-			for _, node := range nodes {
-				nodeMap[node.PackageWithVersion] = node
-			}
-		}
-	}
+func (g *Graph) GetTmplInfo(nodeMap map[string]*Node, paths []string) TmplInfo {
 	return TmplInfo{
 		NodeMap: nodeMap,
 		Paths:   paths,
